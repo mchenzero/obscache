@@ -1,0 +1,21 @@
+{
+  "extends": ["tslint:recommended"],
+  "rules": {
+    "curly": false,
+    "interface-name": [true, "never-prefix"],
+    "max-classes-per-file": [false],
+    "object-literal-key-quotes": [true, "consistent"],
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": [false],
+    "radix": false,
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ],
+    "trailing-comma": [false]
+  }
+}

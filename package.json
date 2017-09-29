@@ -1,0 +1,32 @@
+{
+  "name": "obscache",
+  "version": "0.1.0",
+  "description": "In-memory cache service for Angular with RxJS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mchenzero/obscache.git"
+  },
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && ngc && rimraf ngc_gendir",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "@angular/common": "^4.0.0",
+    "@angular/core": "^4.0.0",
+    "rxjs": "^5.0.1"
+  },
+  "devDependencies": {
+    "@angular/common": "^4.0.0",
+    "@angular/compiler": "^4.0.0",
+    "@angular/compiler-cli": "^4.0.0",
+    "@angular/core": "^4.0.0",
+    "rimraf": "^2.6.2",
+    "rxjs": "^5.0.1",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3",
+    "zone.js": "^0.8.18"
+  }
+}
