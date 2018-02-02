@@ -22,7 +22,7 @@ export class ArticleService {
 
   get(id: string): Observable<Article> {
     return this.cache.get(`article:${id}`).miss(() => ({
-      value: this.http.get(`/api/articles/${id}`).map(res => res.json()),
+      value: this.http.get(`/api/articles/${id}`),
       expires: "15m"
     }));
   }
