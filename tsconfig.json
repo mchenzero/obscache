@@ -10,6 +10,6 @@
     "experimentalDecorators": true
   },
   "angularCompilerOptions": {
-    "genDir": "ngc_gendir"
+    "skipTemplateCodegen": true
   }
 }
