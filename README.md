@@ -5,8 +5,8 @@ In-memory cache service for Angular with RxJS.
 ## Example
 
 ```typescript
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
 import { CacheService } from "obscache";
 import { Observable } from "rxjs/Observable";
 
@@ -18,13 +18,14 @@ export interface Article {
 
 @Injectable()
 export class ArticleService {
-  constructor(private http: Http, private cache: CacheService) {}
+  constructor(private http: HttpClient, private cache: CacheService) {}
 
   get(id: string): Observable<Article> {
-    return this.cache.get(`article:${id}`).miss(() => ({
-      value: this.http.get(`/api/articles/${id}`),
-      expires: "15m"
-    }));
+    return this.cache.get(`article:${id}`)
+      .miss(() => ({
+        value: this.http.get(`/api/articles/${id}`),
+        expires: "15m"
+      }));
   }
 }
 ```
