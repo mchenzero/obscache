@@ -1,6 +1,6 @@
 {
   "name": "obscache",
-  "version": "0.2.0",
+  "version": "0.6.0",
   "description": "In-memory cache service for Angular with RxJS",
   "repository": {
     "type": "git",
@@ -10,23 +10,23 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rimraf dist && ngc && rimraf ngc_gendir",
+    "build": "rimraf dist && ngc",
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "@angular/common": "^5.0.0",
-    "@angular/core": "^5.0.0",
-    "rxjs": "^5.5.0"
+    "@angular/common": "^6.0.0",
+    "@angular/core": "^6.0.0",
+    "rxjs": "^6.0.0"
   },
   "devDependencies": {
-    "@angular/common": "^5.0.0",
-    "@angular/compiler": "^5.0.0",
-    "@angular/compiler-cli": "^5.0.0",
-    "@angular/core": "^5.0.0",
-    "rimraf": "^2.6.2",
-    "rxjs": "^5.5.0",
-    "tslint": "^5.7.0",
-    "typescript": "^2.5.3",
-    "zone.js": "^0.8.18"
+    "@angular/common": "^6.0.0",
+    "@angular/compiler": "^6.0.0",
+    "@angular/compiler-cli": "^6.0.0",
+    "@angular/core": "^6.0.0",
+    "rimraf": "^3.0.0",
+    "rxjs": "^6.0.0",
+    "tslint": "^5.20.0",
+    "typescript": ">=2.7.2 <2.8",
+    "zone.js": "~0.8.26"
   }
 }

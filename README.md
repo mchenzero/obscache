@@ -8,7 +8,7 @@ In-memory cache service for Angular with RxJS.
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { CacheService } from "obscache";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 
 export interface Article {
   id: string;

@@ -1,20 +1,8 @@
 import { isPlatformServer } from "@angular/common";
 import { Inject, Injectable, NgZone, PLATFORM_ID } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Operator } from "rxjs/Operator";
-import { Subject } from "rxjs/Subject";
-import { Subscriber } from "rxjs/Subscriber";
-import { TeardownLogic } from "rxjs/Subscription";
-
-import "rxjs/add/observable/fromPromise";
-import "rxjs/add/observable/of";
-import "rxjs/add/operator/filter";
-import "rxjs/add/operator/first";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/merge";
-import "rxjs/add/operator/mergeMap";
-import "rxjs/add/operator/share";
-import "rxjs/add/operator/startWith";
+import { Observable, Operator, Subject, Subscriber, TeardownLogic } from "rxjs";
+import { from as observableFrom, of as observableOf } from "rxjs";
+import { filter, first, flatMap, map, merge, share, startWith } from "rxjs/operators";
 
 @Injectable()
 export class CacheService {
@@ -27,7 +15,7 @@ export class CacheService {
   private $timer: any; // timer to remove expired keys
 
   constructor(private ngZone: NgZone, @Inject(PLATFORM_ID) private platformId: any) {
-    this.changes = this.$changes.asObservable().share();
+    this.changes = this.$changes.asObservable().pipe(share());
   }
 
   public has(key: string): boolean {
@@ -199,12 +187,13 @@ export interface CacheExpireEvent {
 export class CacheValueObservable<T> extends Observable<T> {
   public static create<T>(cache: CacheService, key: string): CacheValueObservable<T> {
     const observable = new CacheValueObservable<T>(cache, key);
-    const changes = cache.changes
-      .filter((event) => event.type === "set" && event.key === key)
-      .map((event) => event.value);
+    const changes = cache.changes.pipe(
+      filter((event) => event.type === "set" && event.key === key),
+      map((event) => event.value),
+    );
     if (cache.has(key)) {
       const initialValue = (cache as any).$store[key].value;
-      observable.source = changes.startWith(initialValue);
+      observable.source = changes.pipe(startWith(initialValue));
     } else {
       observable.source = changes;
     }
@@ -224,19 +213,20 @@ export class CacheValueObservable<T> extends Observable<T> {
 
   public expires(callback: ExpiresCallback<T>): CacheValueObservable<T> {
     const observable = new CacheValueObservable<T>(this.cache, this.key);
-    observable.source = this.cache.changes
-      .filter((event) => event.type === "expire" && event.key === this.key)
-      .map((event) => callback(event.value))
-      .flatMap((value) => {
+    observable.source = this.cache.changes.pipe(
+      filter((event) => event.type === "expire" && event.key === this.key),
+      map((event) => callback(event.value)),
+      flatMap((value) => {
         if (isObservable(value)) {
-          return value.first();
+          return value.pipe(first());
         } else if (isPromise(value)) {
-          return Observable.fromPromise(value);
+          return observableFrom(value);
         } else {
-          return Observable.of(value);
+          return observableOf(value);
         }
-      })
-      .merge(this);
+      }),
+      merge(this),
+    );
     return observable;
   }
 
@@ -297,7 +287,7 @@ export class CacheValueMissOperator<T> implements Operator<T, T> {
       }
 
       if (isObservable(fetchResultValue)) {
-        fetchResultValue.first().subscribe(onResolve, onError);
+        fetchResultValue.pipe(first()).subscribe(onResolve, onError);
       } else if (isPromise(fetchResultValue)) {
         fetchResultValue.then(onResolve, onError);
       } else {
